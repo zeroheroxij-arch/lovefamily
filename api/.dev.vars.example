@@ -1,0 +1,5 @@
+# Store real values in your deployment provider, never in this repository.
+FAMILY_PASSWORD=duoduo
+MOM_PASSWORD=replace-with-a-separate-mom-password
+SESSION_SECRET=replace-with-a-long-random-string
+GITHUB_DATA_TOKEN=github-token-limited-to-lovefamily-data

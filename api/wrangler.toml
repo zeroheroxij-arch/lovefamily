@@ -1,0 +1,7 @@
+name = "lovefamily-api"
+main = "worker.js"
+compatibility_date = "2026-10-11"
+
+[vars]
+GITHUB_DATA_REPO = "zeroheroxij-arch/lovefamily-data"
+ALLOWED_ORIGIN = "https://zeroheroxij-arch.github.io"
