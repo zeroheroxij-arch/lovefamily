@@ -1,0 +1,34 @@
+name: Sync Lark word list
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 */6 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Fetch word pairs from Lark Sheet
+        env:
+          LARK_APP_ID: ${{ secrets.LARK_APP_ID }}
+          LARK_APP_SECRET: ${{ secrets.LARK_APP_SECRET }}
+          LARK_SPREADSHEET_TOKEN: ${{ secrets.LARK_SPREADSHEET_TOKEN }}
+          LARK_SHEET_ID: ${{ secrets.LARK_SHEET_ID }}
+          LARK_WORD_RANGE: ${{ secrets.LARK_WORD_RANGE }}
+          LARK_OPEN_BASE_URL: ${{ secrets.LARK_OPEN_BASE_URL }}
+        run: node scripts/sync-lark-words.mjs
+      - name: Commit updated word list
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/words.json
+          git diff --cached --quiet || git commit -m "Sync Lark word list"
+          git push

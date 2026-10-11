@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="LoveFamily 家庭积分榜。" /><title>家庭积分榜 | LoveFamily</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,500;0,600;0,700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="assets/family-tools.css" />
+  </head>
+  <body>
+    <header class="shell site-header"><a class="brand" href="index.html"><span class="brand-mark">♥</span>LoveFamily</a><nav class="breadcrumb" aria-label="当前位置"><a href="index.html">首页</a><span>/</span><span>家庭空间</span><span>/</span><strong>家庭积分榜</strong></nav><a class="back" href="index.html#features">← 家庭空间</a></header>
+    <section class="tool-hero"><div class="shell hero-inner"><div class="eyebrow">Family scorebook</div><h1>看见每一次努力，<br />也学会温柔地改正。</h1><p class="hero-copy">把值得表扬的小事记下来，也用明确、可选择的规则处理需要改进的地方。每个月都是一次新的共同成长。</p><div class="hero-badges"><span class="badge">按月查看</span><span class="badge">加分与减分明细</span><span class="badge">当前设备私密保存</span></div></div></section>
+    <main class="shell main"><div class="points-layout"><div><section class="panel"><div class="section-head"><div><h2>家庭积分榜</h2><p id="month-copy">查看本月每位家人的积分与成长记录。</p></div><div class="month-switcher"><button class="month-button" id="previous-month" aria-label="上一个月" type="button">‹</button><input class="month-input" id="month-picker" type="month" aria-label="选择月份" /><button class="month-button" id="next-month" aria-label="下一个月" type="button">›</button></div></div><div class="scoreboard" id="scoreboard"></div></section><section class="panel"><div class="section-head"><div><h2>本月明细</h2><p>所有操作都会保留在这个月份，方便回顾和沟通。</p></div></div><div class="transaction-list" id="transaction-list"></div><div class="privacy-note"><b>⌂</b><span>积分记录只存储在当前浏览器中，不会公开显示在网站上。</span></div></section></div><aside class="action-panel"><h2>记一笔成长</h2><p>为家人加油，或选择需要改进的项目。每次记录都会即时更新积分榜。</p><div class="action-tabs"><button class="action-tab active" data-mode="plus" type="button">＋ 加分</button><button class="action-tab" data-mode="minus" type="button">－ 减分</button></div><label class="field"><span>选择家人</span><select id="member-select"><option value="爸爸">爸爸</option><option value="妈妈">妈妈</option><option value="多多">多多</option></select></label><label class="field"><span id="project-label">表扬项目</span><select id="project-select"></select></label><label class="field"><span>分值</span><select id="points-select"><option value="1">1 分</option><option value="2" selected>2 分</option><option value="3">3 分</option><option value="5">5 分</option></select></label><label class="field"><span>备注（可选）</span><input id="note-input" type="text" maxlength="32" placeholder="例如：主动完成了约定" /></label><button class="button" id="submit-transaction" type="button">记录加分</button></aside></div></main>
+    <footer class="shell"><span>LoveFamily · 家庭积分榜</span><span>规则清楚，鼓励更多。</span></footer><script src="assets/points.js"></script>
+  </body>
+</html>

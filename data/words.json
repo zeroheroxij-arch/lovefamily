@@ -1,0 +1,18 @@
+{
+  "updatedAt": "2026-10-11T00:00:00.000Z",
+  "source": "starter vocabulary",
+  "words": [
+    { "english": "family", "chinese": "家庭" },
+    { "english": "together", "chinese": "一起" },
+    { "english": "remember", "chinese": "记得" },
+    { "english": "kind", "chinese": "友善的" },
+    { "english": "helpful", "chinese": "乐于助人的" },
+    { "english": "celebrate", "chinese": "庆祝" },
+    { "english": "garden", "chinese": "花园" },
+    { "english": "promise", "chinese": "承诺" },
+    { "english": "courage", "chinese": "勇气" },
+    { "english": "wonderful", "chinese": "精彩的" },
+    { "english": "practice", "chinese": "练习" },
+    { "english": "weekend", "chinese": "周末" }
+  ]
+}

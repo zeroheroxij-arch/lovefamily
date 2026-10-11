@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="LoveFamily 英文单词匹配练习。" />
+    <title>单词匹配 | LoveFamily</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,500;0,600;0,700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="assets/family-tools.css" />
+  </head>
+  <body>
+    <header class="shell site-header"><a class="brand" href="index.html"><span class="brand-mark">♥</span>LoveFamily</a><nav class="breadcrumb" aria-label="当前位置"><a href="index.html">首页</a><span>/</span><span>家庭空间</span><span>/</span><strong>单词匹配</strong></nav><a class="back" href="index.html#features">← 家庭空间</a></header>
+    <section class="tool-hero"><div class="shell hero-inner"><div class="eyebrow">Word garden</div><h1>把每个新单词，<br />种进记忆里。</h1><p class="hero-copy">点击一个英文单词，再点击它对应的中文意思。每次答对都会帮助它更少地出现，让练习时间留给真正需要复习的内容。</p><div class="hero-badges"><span class="badge">点击配对</span><span class="badge">答对 <b>3</b> 次后降频</span><span class="badge">词库可由 Lark Sheet 同步</span></div></div></section>
+    <main class="shell main"><section class="panel"><div class="section-head"><div><h2>今日练习</h2><p>请完成本轮所有配对。选错不扣分，可以继续尝试。</p></div><button class="button ghost small" id="new-round" type="button">换一组单词 ↻</button></div><div class="word-layout"><div><div class="match-grid" aria-live="polite"><div class="match-column"><p class="match-label">ENGLISH</p><div id="english-list"></div></div><div class="match-column"><p class="match-label">中文意思</p><div id="chinese-list"></div></div></div><p class="match-hint" id="match-hint"><strong>开始吧：</strong> 先选择左侧的英文单词。</p></div><aside class="practice-aside" aria-label="练习统计"><div class="practice-stat"><span class="stat-label">本轮进度</span><strong class="stat-value" id="round-progress">0 / 5</strong><span class="stat-note">完成后自动记录</span></div><div class="practice-stat"><span class="stat-label">今日答对</span><strong class="stat-value" id="today-correct">0</strong><span class="stat-note">每次正确配对</span></div><div class="practice-stat"><span class="stat-label">已掌握</span><strong class="stat-value" id="mastered-count">0</strong><span class="stat-note">答对 3 次后降频</span></div></aside></div></section><section class="panel"><div class="section-head"><div><h2>词库状态</h2><p>每次打开页面会读取静态词库；点击重新读取可立即获取最新同步结果。</p></div><button class="button ghost small" id="reload-words" type="button">重新读取词库</button></div><div class="data-status" id="data-status"><span>正在读取词库…</span></div></section></main>
+    <footer class="shell"><span>LoveFamily · 单词花园</span><span>每一个小进步，都值得被看见。</span></footer>
+    <script src="assets/word-match.js"></script>
+  </body>
+</html>
