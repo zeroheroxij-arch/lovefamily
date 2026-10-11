@@ -218,7 +218,7 @@
       .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 30px; }
       h2 { max-width: 530px; margin: 13px 0 0; font-family: "Playfair Display", "Noto Sans SC", serif; font-size: clamp(32px, 3.8vw, 50px); font-weight: 600; letter-spacing: -1.7px; line-height: 1.15; }
       .section-text { max-width: 310px; margin: 0 0 5px; color: var(--muted); font-size: 14px; line-height: 1.75; }
-      .feature-grid { display: grid; grid-template-columns: 1.1fr 0.95fr 0.95fr; gap: 18px; margin-top: 45px; }
+      .feature-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; margin-top: 45px; }
       .feature-card { min-height: 300px; padding: 25px; border: 1px solid var(--line); border-radius: 18px; background: #fffdf9; transition: transform 200ms ease, box-shadow 200ms ease; }
       .feature-card:hover { box-shadow: var(--shadow); transform: translateY(-6px); }
       .feature-card.highlight { color: #fff; border-color: var(--deep-sage); background: var(--deep-sage); }
@@ -316,6 +316,7 @@
           <article class="feature-card highlight"><div class="feature-symbol">✦</div><h3>家庭时光轴</h3><p>照片、文字和语音，按时间串成只属于你们的故事。多年以后，也能从容回到每一个今天。</p><div class="tiny-stack"><div class="tiny-line"></div><div class="tiny-line"></div><div class="tiny-line"></div></div></article>
           <a class="feature-card" href="word-match.html"><div class="feature-symbol">Aa</div><h3>单词匹配 <span aria-hidden="true">→</span></h3><p>点击配对英文与中文意思。多次答对的单词会自动降低出现频率，词库可由 Lark Sheet 更新。</p><div class="tiny-stack"><div class="tiny-line"></div><div class="tiny-line"></div><div class="tiny-line"></div></div></a>
           <a class="feature-card" href="points.html"><div class="feature-symbol">♡</div><h3>家庭积分榜 <span aria-hidden="true">→</span></h3><p>按月查看爸爸、妈妈和多多的积分。选择项目加分或减分，清楚记录每一份努力。</p><div class="tiny-stack"><div class="tiny-line"></div><div class="tiny-line"></div><div class="tiny-line"></div></div></a>
+          <a class="feature-card" href="meal-order.html"><div class="feature-symbol">♨</div><h3>多多点单 <span aria-hidden="true">→</span></h3><p>妈妈录入家庭菜谱，多多可以提前为午餐和晚餐点单，待做清单清清楚楚。</p><div class="tiny-stack"><div class="tiny-line"></div><div class="tiny-line"></div><div class="tiny-line"></div></div></a>
         </div>
       </section>
 
