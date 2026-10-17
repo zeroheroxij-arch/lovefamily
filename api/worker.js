@@ -7,6 +7,9 @@ export default {
     try {
       const url = new URL(request.url);
       if (url.pathname === "/api/auth/login" && request.method === "POST") return json(await login(request, env), 200, cors);
+      const pointsMonth = url.pathname.match(/^\/api\/points\/(\d{4}-\d{2})$/);
+      if (pointsMonth && request.method === "GET") return json(await getPoints(env, pointsMonth[1]), 200, cors);
+      if (pointsMonth && request.method === "POST") return json(await addPoint(request, env, pointsMonth[1]), 201, cors);
       const session = await requireSession(request, env);
       if (url.pathname === "/api/family/bootstrap" && request.method === "GET") return json(await bootstrap(env), 200, cors);
       if (url.pathname === "/api/progress/answer" && request.method === "POST") return json(await recordAnswer(request, env, session), 200, cors);
@@ -53,6 +56,54 @@ async function recordAnswer(request, env, session) {
   return { wordId, progress: entry, learner: session.role };
 }
 
+const POINT_MEMBERS = new Set(["爸爸", "妈妈", "多多"]);
+const POINT_PROJECTS = {
+  plus: new Set(["主动帮忙家务", "完成学习计划", "照顾家人", "遵守家庭约定", "特别的好习惯"]),
+  minus: new Set(["忘记收拾物品", "没有遵守约定", "说话不够友善", "拖延没有完成任务", "其他需要改进的事"])
+};
+const POINT_VALUES = new Set([1, 2, 3, 5]);
+
+async function getPoints(env, month) {
+  const points = await getJson(env, `points/${month}.json`, true);
+  return normalizePoints(points, month);
+}
+
+async function addPoint(request, env, month) {
+  const { member, project, value, mode, note = "" } = await request.json();
+  if (!POINT_MEMBERS.has(member) || !POINT_PROJECTS[mode]?.has(project) || !POINT_VALUES.has(value)) {
+    throw httpError(400, "Invalid point transaction");
+  }
+  if (typeof note !== "string" || note.length > 32) throw httpError(400, "Invalid point note");
+
+  const transaction = {
+    id: crypto.randomUUID(), member, project,
+    points: mode === "plus" ? value : -value,
+    note: note.trim(),
+    createdAt: new Date().toISOString()
+  };
+  const path = `points/${month}.json`;
+
+  // The GitHub Contents API uses a SHA precondition. Retry a competing update
+  // so two family members recording points do not lose one another's entry.
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    const points = normalizePoints(await getJson(env, path, true), month);
+    points.transactions.push(transaction);
+    points.updatedAt = transaction.createdAt;
+    try {
+      await putJson(env, path, points, `Add ${member} point transaction for ${month}`);
+      return { transaction, points };
+    } catch (error) {
+      if (error.status !== 409 || attempt === 2) throw error;
+    }
+  }
+}
+
+function normalizePoints(points, month) {
+  if (!points) return { month, updatedAt: null, transactions: [] };
+  if (!Array.isArray(points.transactions)) throw httpError(500, "Invalid points data");
+  return { month, updatedAt: points.updatedAt || null, transactions: points.transactions };
+}
+
 async function writeAdminData(request, env, session, pathname) {
   if (session.role !== "mom") throw httpError(403, "妈妈管理密码 required");
   const path = pathname.replace("/api/admin/", "");
@@ -82,7 +133,7 @@ async function putJson(env, path, data, message) {
 }
 
 function github(env, path, options = {}) {
-  return fetch(`https://api.github.com${path}`, { ...options, headers: { Accept: "application/vnd.github+json", Authorization: `Bearer ${env.GITHUB_DATA_TOKEN}`, "Content-Type": "application/json", ...options.headers } });
+  return fetch(`https://api.github.com${path}`, { ...options, headers: { Accept: "application/vnd.github+json", Authorization: `Bearer ${env.GITHUB_DATA_TOKEN}`, "Content-Type": "application/json", "User-Agent": "lovefamily-api", ...options.headers } });
 }
 
 async function requireSession(request, env) {
