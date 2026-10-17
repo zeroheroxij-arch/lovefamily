@@ -10,9 +10,17 @@ export default {
       const pointsMonth = url.pathname.match(/^\/api\/points\/(\d{4}-\d{2})$/);
       if (pointsMonth && request.method === "GET") return json(await getPoints(env, pointsMonth[1]), 200, cors);
       if (pointsMonth && request.method === "POST") return json(await addPoint(request, env, pointsMonth[1]), 201, cors);
+      if (url.pathname === "/api/libraries" && request.method === "GET") return json(await getJson(env, "libraries.json"), 200, cors);
+      const libraryId = url.pathname.match(/^\/api\/libraries\/([a-z0-9-]+)$/);
+      if (libraryId && request.method === "GET") return json(await getJson(env, `libraries/${libraryId[1]}.json`), 200, cors);
+      const taskDate = url.pathname.match(/^\/api\/tasks\/(\d{4}-\d{2}-\d{2})$/);
+      if (taskDate && request.method === "GET") return json(await getJson(env, `tasks/${taskDate[1]}.json`, true), 200, cors);
+      if (url.pathname === "/api/progress/duoduo" && request.method === "GET") return json(await getProgress(env), 200, cors);
+      if (url.pathname === "/api/progress/answer" && request.method === "POST") return json(await recordAnswer(request, env), 200, cors);
+      if (url.pathname === "/api/menu" && request.method === "GET") return json(await getMenu(env), 200, cors);
+      if (url.pathname === "/api/menu/orders" && request.method === "POST") return json(await addMenuOrder(request, env), 201, cors);
       const session = await requireSession(request, env);
       if (url.pathname === "/api/family/bootstrap" && request.method === "GET") return json(await bootstrap(env), 200, cors);
-      if (url.pathname === "/api/progress/answer" && request.method === "POST") return json(await recordAnswer(request, env, session), 200, cors);
       if (url.pathname.startsWith("/api/admin/") && request.method === "PUT") return json(await writeAdminData(request, env, session, url.pathname), 200, cors);
       return json({ error: "Not found" }, 404, cors);
     } catch (error) {
@@ -39,21 +47,31 @@ async function bootstrap(env) {
   return { catalogue, task, progress, videos };
 }
 
-async function recordAnswer(request, env, session) {
+async function getProgress(env) {
+  return (await getJson(env, "progress/duoduo.json", true)) || { updatedAt: null, words: {} };
+}
+
+async function recordAnswer(request, env) {
   const { wordId, correct } = await request.json();
-  if (!wordId || typeof correct !== "boolean") throw httpError(400, "Invalid answer event");
-  const progress = await getJson(env, "progress/duoduo.json");
-  const entry = progress.words[wordId] || { attempts: 0, correct: 0, streak: 0, mastery: "new" };
-  entry.attempts += 1;
-  entry.correct += correct ? 1 : 0;
-  entry.streak = correct ? entry.streak + 1 : 0;
-  entry.lastPracticedAt = new Date().toISOString();
-  const accuracy = entry.correct / entry.attempts;
-  entry.mastery = entry.correct >= 6 && accuracy >= .85 ? "mastered" : entry.correct >= 3 && accuracy >= .75 ? "familiar" : entry.correct ? "learning" : "new";
-  progress.words[wordId] = entry;
-  progress.updatedAt = entry.lastPracticedAt;
-  await putJson(env, "progress/duoduo.json", progress, "Update Duoduo word progress");
-  return { wordId, progress: entry, learner: session.role };
+  if (!/^[a-z0-9-]{1,64}$/.test(wordId || "") || typeof correct !== "boolean") throw httpError(400, "Invalid answer event");
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    const progress = await getProgress(env);
+    const entry = progress.words[wordId] || { attempts: 0, correct: 0, streak: 0, mastery: "new" };
+    entry.attempts += 1;
+    entry.correct += correct ? 1 : 0;
+    entry.streak = correct ? entry.streak + 1 : 0;
+    entry.lastPracticedAt = new Date().toISOString();
+    const accuracy = entry.correct / entry.attempts;
+    entry.mastery = entry.correct >= 6 && accuracy >= .85 ? "mastered" : entry.correct >= 3 && accuracy >= .75 ? "familiar" : entry.correct ? "learning" : "new";
+    progress.words[wordId] = entry;
+    progress.updatedAt = entry.lastPracticedAt;
+    try {
+      await putJson(env, "progress/duoduo.json", progress, "Update Duoduo word progress");
+      return { wordId, progress: entry };
+    } catch (error) {
+      if (error.status !== 409 || attempt === 2) throw error;
+    }
+  }
 }
 
 const POINT_MEMBERS = new Set(["爸爸", "妈妈", "多多"]);
@@ -104,10 +122,43 @@ function normalizePoints(points, month) {
   return { month, updatedAt: points.updatedAt || null, transactions: points.transactions };
 }
 
+function normalizeMenu(menu) {
+  if (!menu) return { updatedAt: null, dishes: [], orders: [] };
+  if (!Array.isArray(menu.dishes) || !Array.isArray(menu.orders)) throw httpError(500, "Invalid menu data");
+  return menu;
+}
+
+async function getMenu(env) {
+  return normalizeMenu(await getJson(env, "menu.json", true));
+}
+
+async function addMenuOrder(request, env) {
+  const { date, meal, dishIds } = await request.json();
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date || "") || !["午餐", "晚餐"].includes(meal) || !Array.isArray(dishIds) || !dishIds.length || dishIds.length > 8) throw httpError(400, "Invalid menu order");
+  const uniqueIds = [...new Set(dishIds)];
+  if (uniqueIds.some((id) => !/^[a-z0-9-]{1,64}$/.test(id))) throw httpError(400, "Invalid menu order");
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    const menu = await getMenu(env);
+    const dishes = uniqueIds.map((id) => menu.dishes.find((dish) => dish.id === id && dish.available));
+    if (dishes.some((dish) => !dish)) throw httpError(400, "Selected dish is unavailable");
+    const order = { id: crypto.randomUUID(), date, meal, dishes: dishes.map(({ id, name, emoji, category }) => ({ id, name, emoji: emoji || emojiForCategory(category) })), createdAt: new Date().toISOString() };
+    menu.orders.push(order);
+    menu.updatedAt = order.createdAt;
+    try {
+      await putJson(env, "menu.json", menu, `Add menu order for ${date}`);
+      return { order, menu };
+    } catch (error) {
+      if (error.status !== 409 || attempt === 2) throw error;
+    }
+  }
+}
+
+function emojiForCategory(category) { return ({ "家常菜": "🍲", "主食": "🍚", "汤羹": "🥣", "小点心": "🍪" })[category] || "🍽"; }
+
 async function writeAdminData(request, env, session, pathname) {
   if (session.role !== "mom") throw httpError(403, "妈妈管理密码 required");
   const path = pathname.replace("/api/admin/", "");
-  if (!/^(libraries(\/[a-z0-9-]+)?|tasks\/\d{4}-\d{2}-\d{2}|videos\/p1)\.json$/.test(path)) throw httpError(400, "Unsupported data path");
+  if (!/^(libraries(\/[a-z0-9-]+)?|tasks\/\d{4}-\d{2}-\d{2}|videos\/p1|menu)\.json$/.test(path)) throw httpError(400, "Unsupported data path");
   const body = await request.json();
   await putJson(env, path, body, `Update ${path}`);
   return { ok: true, path };
