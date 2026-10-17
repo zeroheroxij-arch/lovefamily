@@ -25,6 +25,7 @@ async function api(path, options = {}) {
   if (!configured()) throw new Error("积分服务尚未配置，请先填写 assets/family-api-config.js 中的 Worker 地址。");
   const response = await fetch(`${API_BASE_URL}${path}`, {
     ...options,
+    cache: "no-store",
     headers: { "Content-Type": "application/json", ...options.headers }
   });
   const data = await response.json().catch(() => ({}));

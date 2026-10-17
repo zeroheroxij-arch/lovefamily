@@ -203,5 +203,5 @@ async function hmac(value, secret) { const key = await crypto.subtle.importKey("
 function b64(value) { return btoa(value).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""); }
 function fromB64(value) { const padded = value.replace(/-/g, "+").replace(/_/g, "/") + "===".slice((value.length + 3) % 4); return Uint8Array.from(atob(padded), (c) => c.charCodeAt(0)); }
 function corsHeaders(request, env) { const origin = request.headers.get("Origin"); return origin && origin === env.ALLOWED_ORIGIN ? { "Access-Control-Allow-Origin": origin, "Access-Control-Allow-Headers": "Authorization, Content-Type", "Access-Control-Allow-Methods": "GET, POST, PUT, OPTIONS", Vary: "Origin" } : {}; }
-function json(value, status, headers) { return new Response(JSON.stringify(value), { status, headers: { "Content-Type": "application/json", ...headers } }); }
+function json(value, status, headers) { return new Response(JSON.stringify(value), { status, headers: { "Content-Type": "application/json", "Cache-Control": "no-store", ...headers } }); }
 function httpError(status, message) { const error = new Error(message); error.status = status; return error; }
