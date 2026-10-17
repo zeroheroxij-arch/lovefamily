@@ -85,6 +85,17 @@
         font-family: Arial, sans-serif;
         font-size: 17px;
       }
+      .quick-nav { display: flex; align-items: center; gap: 10px; }
+      .quick-nav a {
+        padding: 8px 12px;
+        border: 1px solid transparent;
+        border-radius: 999px;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 700;
+        transition: color 160ms ease, border-color 160ms ease, background 160ms ease;
+      }
+      .quick-nav a:hover, .quick-nav a:focus-visible { border-color: var(--line); color: var(--deep-sage); background: #fffdf9; outline: none; }
       .hero {
         display: grid;
         grid-template-columns: 1.01fr 0.99fr;
@@ -201,7 +212,10 @@
 
       @media (max-width: 800px) {
         .wrap { width: min(100% - 36px, 560px); }
-        .site-header { min-height: 72px; }
+        .site-header { min-height: 72px; padding: 14px 0; flex-wrap: wrap; gap: 12px; }
+        .quick-nav { order: 2; width: 100%; gap: 7px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+        .quick-nav::-webkit-scrollbar { display: none; }
+        .quick-nav a { flex: 0 0 auto; padding: 7px 10px; font-size: 12px; }
         .hero { grid-template-columns: 1fr; gap: 12px; min-height: auto; padding: 52px 0 50px; }
         h1 { font-size: clamp(43px, 13vw, 64px); letter-spacing: -2.5px; }
         .hero-copy { font-size: 15px; }
@@ -222,6 +236,11 @@
       <div class="wrap">
         <header class="site-header">
           <a class="brand" href="#top" aria-label="LoveFamily 首页"><span class="brand-mark">♥</span>LoveFamily</a>
+          <nav class="quick-nav" aria-label="家庭工具快捷切换">
+            <a href="word-garden.html">单词花园</a>
+            <a href="points.html">家庭积分榜</a>
+            <a href="meal-order.html">妈妈菜单</a>
+          </nav>
         </header>
 
         <main id="top">
