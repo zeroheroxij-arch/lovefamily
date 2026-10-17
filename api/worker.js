@@ -169,7 +169,8 @@ async function getJson(env, path, optional = false) {
   if (optional && response.status === 404) return null;
   if (!response.ok) throw httpError(response.status, `Could not read ${path}`);
   const payload = await response.json();
-  return JSON.parse(atob(payload.content.replace(/\n/g, "")));
+  const bytes = Uint8Array.from(atob(payload.content.replace(/\n/g, "")), (character) => character.charCodeAt(0));
+  return JSON.parse(new TextDecoder().decode(bytes));
 }
 
 async function putJson(env, path, data, message) {
