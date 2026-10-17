@@ -85,42 +85,6 @@
         font-family: Arial, sans-serif;
         font-size: 17px;
       }
-      .nav { display: flex; align-items: center; gap: 28px; }
-      .nav a {
-        position: relative;
-        color: var(--muted);
-        font-size: 14px;
-        font-weight: 600;
-      }
-      .nav a:first-child, .nav a:hover { color: var(--ink); }
-      .nav a:first-child::after {
-        position: absolute;
-        right: 0;
-        bottom: -7px;
-        left: 0;
-        height: 2px;
-        border-radius: 2px;
-        background: var(--coral);
-        content: "";
-      }
-      .header-action, .button {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        min-height: 42px;
-        padding: 0 17px;
-        border: 1px solid transparent;
-        border-radius: 999px;
-        cursor: pointer;
-        font-size: 14px;
-        font-weight: 700;
-        transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
-      }
-      .header-action, .button.primary { color: white; background: var(--ink); }
-      .header-action:hover, .button.primary:hover { box-shadow: 0 8px 20px rgba(36, 48, 45, 0.18); transform: translateY(-2px); }
-      .menu-toggle { display: none; border: 0; color: var(--ink); background: transparent; font-size: 23px; }
-
       .hero {
         display: grid;
         grid-template-columns: 1.01fr 0.99fr;
@@ -151,10 +115,6 @@
       }
       h1 em { color: var(--coral); font-weight: 600; }
       .hero-copy { max-width: 480px; margin: 0; color: var(--muted); font-size: 17px; line-height: 1.85; }
-      .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
-      .button.secondary { border-color: var(--line); background: rgba(255, 255, 255, 0.6); }
-      .button.secondary:hover { border-color: var(--sage); background: #fff; }
-      .button svg { width: 16px; height: 16px; }
       .member-row { display: flex; align-items: center; gap: 12px; margin-top: 35px; color: var(--muted); font-size: 13px; }
       .avatars { display: flex; padding-left: 9px; }
       .avatar {
@@ -232,17 +192,6 @@
       .tiny-line:nth-child(1) { width: 87%; } .tiny-line:nth-child(2) { width: 68%; } .tiny-line:nth-child(3) { width: 77%; }
       .highlight .tiny-line { background: rgba(255,255,255,0.28); }
 
-      .cta { padding: 0 0 88px; }
-      .cta-card { position: relative; display: grid; grid-template-columns: 1.1fr 0.9fr; align-items: center; min-height: 340px; overflow: hidden; padding: 54px 68px; border-radius: 26px; color: white; background: #d96c56; }
-      .cta-card::before { position: absolute; top: -200px; right: -50px; width: 490px; height: 490px; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; box-shadow: 0 0 0 50px rgba(255,255,255,0.08), 0 0 0 105px rgba(255,255,255,0.06); content: ""; }
-      .cta-content { position: relative; z-index: 1; }
-      .cta .eyebrow { color: rgba(255,255,255,0.74); }
-      .cta h2 { margin-top: 13px; max-width: 510px; }
-      .cta p { margin: 15px 0 25px; color: rgba(255,255,255,0.82); font-size: 14px; }
-      .cta .button { color: var(--ink); background: #fffdf8; }
-      .cta-quote { position: relative; z-index: 1; align-self: end; padding: 20px; border-left: 1px solid rgba(255,255,255,0.55); font-family: "Playfair Display", "Noto Sans SC", serif; font-size: 21px; font-style: italic; line-height: 1.6; }
-      .cta-quote span { display: block; margin-top: 10px; font-family: "DM Mono", monospace; font-size: 10px; font-style: normal; letter-spacing: 1px; opacity: 0.7; }
-
       footer { display: flex; align-items: center; justify-content: space-between; min-height: 84px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
       footer .brand { font-size: 17px; color: var(--ink); } footer .brand-mark { width: 23px; height: 23px; border-radius: 8px 8px 8px 2px; font-size: 13px; }
 
@@ -253,10 +202,6 @@
       @media (max-width: 800px) {
         .wrap { width: min(100% - 36px, 560px); }
         .site-header { min-height: 72px; }
-        .nav, .header-action { display: none; }
-        .menu-toggle { display: block; }
-        .nav.open { position: absolute; z-index: 3; top: 62px; right: 18px; display: flex; flex-direction: column; align-items: stretch; gap: 0; min-width: 165px; padding: 8px; border: 1px solid var(--line); border-radius: 14px; background: rgba(255,253,249,0.98); box-shadow: var(--shadow); }
-        .nav.open a { padding: 10px 12px; }.nav.open a:first-child::after { display: none; }
         .hero { grid-template-columns: 1fr; gap: 12px; min-height: auto; padding: 52px 0 50px; }
         h1 { font-size: clamp(43px, 13vw, 64px); letter-spacing: -2.5px; }
         .hero-copy { font-size: 15px; }
@@ -267,10 +212,9 @@
         .ticker-inner { grid-template-columns: 1fr; }.ticker-item, .ticker-item:first-child { min-height: 55px; border-right: 0; border-left: 0; border-bottom: 1px solid var(--line); }.ticker-item:last-child { border-bottom: 0; }
         .features { padding: 76px 0; }.section-heading { display: block; }.section-text { margin-top: 17px; }
         .feature-grid { grid-template-columns: 1fr; margin-top: 30px; }.feature-card { min-height: 240px; }.feature-card h3 { margin-top: 45px; }
-        .cta { padding-bottom: 55px; }.cta-card { grid-template-columns: 1fr; padding: 40px 30px; }.cta-quote { margin-top: 25px; font-size: 18px; }
         footer { gap: 12px; padding: 20px 0; align-items: flex-start; flex-direction: column; }
       }
-      @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; }.reveal { opacity: 1; transform: none; animation: none; }.feature-card, .button, .header-action { transition: none; } }
+      @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; }.reveal { opacity: 1; transform: none; animation: none; }.feature-card { transition: none; } }
     </style>
   </head>
   <body>
@@ -278,11 +222,6 @@
       <div class="wrap">
         <header class="site-header">
           <a class="brand" href="#top" aria-label="LoveFamily 首页"><span class="brand-mark">♥</span>LoveFamily</a>
-          <nav class="nav" id="main-nav" aria-label="主导航">
-            <a href="#top">首页</a><a href="#moments">我们的日常</a><a href="#features">家庭空间</a>
-          </nav>
-          <a class="header-action" href="#join">进入家庭</a>
-          <button class="menu-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-nav">☰</button>
         </header>
 
         <main id="top">
@@ -291,10 +230,6 @@
               <div class="eyebrow reveal">A home for every memory</div>
               <h1 class="reveal delay-1">把所有的爱，<br />留在<em>日常</em>里。</h1>
               <p class="hero-copy reveal delay-2">LoveFamily 是一家人的温暖角落。记录每次相聚、记得彼此的日程，也把一句想念及时送到家人身边。</p>
-              <div class="hero-actions reveal delay-3">
-                <a class="button primary" href="#join">创建家庭空间 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-                <a class="button secondary" href="#moments">看看我们的故事</a>
-              </div>
               <div class="member-row reveal delay-3"><div class="avatars"><span class="avatar">妈妈</span><span class="avatar">爸爸</span><span class="avatar">多多</span></div><span>这是多多和爸爸妈妈的爱之家</span></div>
             </div>
             <div class="hero-art reveal delay-2" aria-label="一家人相伴的温暖画面" role="img">
@@ -320,23 +255,7 @@
         </div>
       </section>
 
-      <section class="cta wrap" id="join">
-        <div class="cta-card"><div class="cta-content"><div class="eyebrow">Start a family space</div><h2>从今天起，<br />好好记录彼此。</h2><p>创建你的 LoveFamily 空间，邀请家人一起住进温暖的日常。</p><a class="button" href="mailto:hello@lovefamily.example?subject=LoveFamily%20邀请">创建我的家庭空间 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div><blockquote class="cta-quote">“最好的礼物，是我们依然有许多平凡的日子可以一起过。”<span>LOVEFAMILY · 2026</span></blockquote></div>
-      </section>
-
       <div class="wrap"><footer><a class="brand" href="#top"><span class="brand-mark">♥</span>LoveFamily</a><span>为每一份亲情，留一盏小灯。</span><span>© 2026 LoveFamily</span></footer></div>
     </div>
-    <script>
-      const toggle = document.querySelector('.menu-toggle');
-      const nav = document.querySelector('.nav');
-      toggle.addEventListener('click', () => {
-        const open = nav.classList.toggle('open');
-        toggle.setAttribute('aria-expanded', open);
-        toggle.textContent = open ? '×' : '☰';
-      });
-      nav.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => {
-        nav.classList.remove('open'); toggle.setAttribute('aria-expanded', 'false'); toggle.textContent = '☰';
-      }));
-    </script>
   </body>
 </html>
